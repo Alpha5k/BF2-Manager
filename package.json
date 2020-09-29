@@ -1,0 +1,19 @@
+{
+  "name": "bf2_manager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "dependencies": {
+    "discord.js": "discordjs/discord.js",
+    "discord.js-commando": "discordjs/Commando",
+    "sqlite": "^4.0.14",
+    "sqlite3": "^5.0.0",
+    "table": "^6.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alpha",
+  "license": "ISC"
+}
