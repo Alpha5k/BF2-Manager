@@ -5,7 +5,8 @@ function timeout(ms) {
 }
 
 class WebAdmin {
-    constructor(url, username, password) {
+    constructor(name, url, username, password) {
+        this.name = name
         this.url = url
         this.auth = `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`
     }
@@ -64,7 +65,7 @@ class WebAdmin {
     async banPlayer(id) {
         var response = await fetch (`${this.url}/live/players`, {
             method: 'POST',
-            body: `{'Action':'players_ban', 'PlayerId':${id}}`,
+            body: `{'Action':'players_ban', 'BanDuration':-1, 'BanTypeId':'0', 'PlayerId':${id}}`,
             headers: {'Authorization': this.auth}
         })
         return await response.json()

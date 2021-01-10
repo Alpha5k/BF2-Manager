@@ -32,7 +32,12 @@ class Galaxy {
             }
         })
 
-        return await response.json()
+        try {
+            return await response.json()
+        } catch (e) {
+            console.error(`Error: ${e.message}`)
+            return {items: {}}
+        }
     }
 }
 

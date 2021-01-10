@@ -3,7 +3,6 @@ const commando = require('discord.js-commando');
 const path = require('path');
 const sqlite = require('sqlite');
 const sqlite3 = require('sqlite3')
-const token = require('./auth.json').token;
 
 const WebAdmin = require('./webadmin.js')
 const Galaxy = require('./galaxy.js')
@@ -37,8 +36,8 @@ client.registry
 	.registerGroup('discord', 'Discord')
 	.registerCommandsIn(path.join(__dirname, 'commands'));
 
-client.servers = servers.map(s => new WebAdmin(s.url, s.username, s.password))
+client.servers = servers.map(s => new WebAdmin(...Object.values(s)))
 client.galaxy = new Galaxy(config.steam_ticket)
 client.status = new Status(client)
 
-client.login(token)
+client.login(config.discord_token)

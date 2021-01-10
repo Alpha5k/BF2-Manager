@@ -4,7 +4,7 @@ const status_ids = [
     "Running",
     "Stopped",
     "Starting",
-    "Stopped"
+    "Stopping"
 ]
 
 const maps = {
@@ -80,8 +80,14 @@ class Status {
     }
 
     async createStatus(server) {
-        var status = await server.getStatus()
-        var players = await server.getPlayers()
+        try {
+            var status = await server.getStatus()
+            var players = await server.getPlayers()
+        } catch (e) {
+            console.error(`Error retrieving status for ${server.name}: ${e.message}`)
+            var status = {ServerName: server.name, Status: 1, MaxPlayers: 0}
+            var players = []
+        }
         
         var embed = {
             "color": 10921638,
@@ -129,18 +135,18 @@ class Status {
 
     async updateStatuses() {
         var statuses = this.client.provider.get('global', 'statuses', [])
-        for (var status of statuses) {
+        for (var i = 0; i < statuses.length; i++) {
             try {
-                var server = this.client.servers[status.server]
+                var server = this.client.servers[statuses[i].server]
                 var embed = await this.createStatus(server)
-                var channel = this.client.channels.cache.get(status.channel)
-                if (status.message) {
-                    await (await channel.messages.fetch(status.message)).edit({embed})
+                var channel = this.client.channels.cache.get(statuses[i].channel)
+                if (statuses[i].message) {
+                    await (await channel.messages.fetch(statuses[i].message)).edit({embed})
                 } else {
                     statuses[i].message = (await channel.send({embed})).id
                 }
             } catch (e) {
-                console.error(e.stack)
+                console.error(`Error updating status for ${server.name}: ${e.message}`)
             }
         }
         this.client.provider.set('global', 'statuses', statuses)
@@ -191,7 +197,13 @@ class Status {
         var servers = await this.client.galaxy.getServers()
         servers = servers.items.map(s => s.matchmaking.fgd_str_host_name)
         for (var server of this.client.servers) {
-            var name = (await server.getStatus()).ServerName
+            try {
+                var name = (await server.getStatus()).ServerName
+            } catch (e) {
+                console.error(`Error retrieving status for ${server.name}: ${e.message}`)
+                continue
+            }
+
             if (!servers.includes(name)) {
                 var players = await server.getPlayers()
                 if (!players.length) {
