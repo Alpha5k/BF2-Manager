@@ -26,17 +26,19 @@ module.exports = class BanCommand extends commando.Command {
         }
 
         var server = this.client.servers[parseInt(args.server) - 1]
+        await server.sendChat(`!endgame`)
+        var chat = await server.getChat()
+        msg.channel.send(entities.decode(chat.filter(c => c.IsSystem)[0].Message))
+    }
 
+    hasPermission(msg) {
         var roles = msg.member.roles.cache
         var admins = this.client.provider.get(msg.guild, "admins", [])
         var admin_roles = this.client.provider.get(msg.guild, "admin_roles", [])
-        
-        if (admins.includes(msg.member.id) || roles.some(r => admin_roles.includes(r.id))) {
-            await server.sendChat(`!endgame`)
-            var chat = await server.getChat()
-            msg.channel.send(entities.decode(chat.filter(c => c.IsSystem)[0].Message))
-        } else {
+        if (!admins.includes(msg.member.id) && !roles.some(r => admin_roles.includes(r.id))) {
             msg.react("❌")
+            return false
         }
+        return true
     }
 }

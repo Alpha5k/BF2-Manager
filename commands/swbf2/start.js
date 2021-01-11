@@ -26,21 +26,23 @@ module.exports = class StartCommand extends commando.Command {
         }
 
         var server = this.client.servers[parseInt(args.server) - 1]
+        msg.react("⌛")
+        await server.startServer()
+        //Discord.js Sucks
+        for (var reaction of msg.reactions.cache.values()) {
+            reaction.users.remove(this.client.user.id)
+        }
+        msg.react("✅")
+    }
 
+    hasPermission(msg) {
         var roles = msg.member.roles.cache
         var admins = this.client.provider.get(msg.guild, "admins", [])
         var admin_roles = this.client.provider.get(msg.guild, "admin_roles", [])
-        
-        if (admins.includes(msg.member.id) || roles.some(r => admin_roles.includes(r.id))) {
-            msg.react("⌛")
-            await server.startServer()
-            //Discord.js Sucks
-            for (var reaction of msg.reactions.cache.values()) {
-                reaction.users.remove(this.client.user.id)
-            }
-            msg.react("✅")
-        } else {
+        if (!admins.includes(msg.member.id) && !roles.some(r => admin_roles.includes(r.id))) {
             msg.react("❌")
+            return false
         }
+        return true
     }
 }

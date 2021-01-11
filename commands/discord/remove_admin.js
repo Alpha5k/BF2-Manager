@@ -18,21 +18,22 @@ module.exports = class RemoveAdminCommand extends commando.Command {
     }
 
     async run(msg, args) {
-        var roles = msg.member.roles.cache
         var admins = this.client.provider.get(msg.guild, "admins", [])
-        var admin_roles = this.client.provider.get(msg.guild, "admin_roles", [])
-        
-        if (admins.includes(msg.member.id) || roles.some(r => admin_roles.includes(r.id))) {
-            var index = admins.indexOf(args.user.id)
-            if (index > -1) {
-                admins.splice(index, 1)
-                this.client.provider.set(msg.guild, "admins", admins)
-                msg.react("✅")
-            } else {
-                msg.react("❌")
-            }
+        var index = admins.indexOf(args.user.id)
+        if (index > -1) {
+            admins.splice(index, 1)
+            this.client.provider.set(msg.guild, "admins", admins)
+            msg.react("✅")
         } else {
             msg.react("❌")
         }
+    }
+
+    hasPermission(msg) {
+        if (!this.client.isOwner(msg.member)) {
+            msg.react("❌")
+            return false
+        }
+        return true
     }
 }

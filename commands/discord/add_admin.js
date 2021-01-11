@@ -18,16 +18,17 @@ module.exports = class AddAdminCommand extends commando.Command {
     }
 
     async run(msg, args) {
-        var roles = msg.member.roles.cache
         var admins = this.client.provider.get(msg.guild, "admins", [])
-        var admin_roles = this.client.provider.get(msg.guild, "admin_roles", [])
-        
-        if (admins.includes(msg.member.id) || roles.some(r => admin_roles.includes(r.id))) {
-            admins.push(args.user.id)
-            this.client.provider.set(msg.guild, "admins", admins)
-            msg.react("✅")
-        } else {
+        admins.push(args.user.id)
+        this.client.provider.set(msg.guild, "admins", admins)
+        msg.react("✅")
+    }
+
+    hasPermission(msg) {
+        if (!this.client.isOwner(msg.member)) {
             msg.react("❌")
+            return false
         }
+        return true
     }
 }

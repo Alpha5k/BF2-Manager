@@ -25,22 +25,24 @@ module.exports = class StopCommand extends commando.Command {
             return msg.reply(`Please select a server from the list\`\`\`md\n${servers}\`\`\``)
         }
 
-        var server = this.client.servers[parseInt(args.server) - 1]
+        var server = this.client.servers[parseInt(args.server) - 1]  
+        msg.react("⌛")
+        await server.stopServer()
+        //Discord.js Sucks
+        for (var reaction of msg.reactions.cache.values()) {
+            reaction.users.remove(this.client.user.id)
+        }
+        msg.react("✅")
+    }
 
+    hasPermission(msg) {
         var roles = msg.member.roles.cache
         var admins = this.client.provider.get(msg.guild, "admins", [])
         var admin_roles = this.client.provider.get(msg.guild, "admin_roles", [])
-        
-        if (admins.includes(msg.member.id) || roles.some(r => admin_roles.includes(r.id))) {
-            msg.react("⌛")
-            await server.stopServer()
-            //Discord.js Sucks
-            for (var reaction of msg.reactions.cache.values()) {
-                reaction.users.remove(this.client.user.id)
-            }
-            msg.react("✅")
-        } else {
+        if (!admins.includes(msg.member.id) && !roles.some(r => admin_roles.includes(r.id))) {
             msg.react("❌")
+            return false
         }
+        return true
     }
 }

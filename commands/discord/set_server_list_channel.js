@@ -19,19 +19,21 @@ module.exports = class SetServerListChannel extends commando.Command {
 
     async run(msg, args) {
         var channel = args.channel.id
+        this.client.provider.set('global', 'server_list', {
+            channel: channel,
+            messages: []
+        })
+        msg.react("✅")
+    }
 
+    hasPermission(msg) {
         var roles = msg.member.roles.cache
         var admins = this.client.provider.get(msg.guild, "admins", [])
         var admin_roles = this.client.provider.get(msg.guild, "admin_roles", [])
-        
-        if (admins.includes(msg.member.id) || roles.some(r => admin_roles.includes(r.id))) {
-            this.client.provider.set('global', 'server_list', {
-                channel: channel,
-                messages: []
-            })
-            msg.react("✅")
-        } else {
+        if (!admins.includes(msg.member.id) && !roles.some(r => admin_roles.includes(r.id))) {
             msg.react("❌")
+            return false
         }
+        return true
     }
 }

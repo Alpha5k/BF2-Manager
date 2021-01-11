@@ -30,22 +30,24 @@ module.exports = class KickCommand extends commando.Command {
             return msg.reply(`Please select a server from the list\`\`\`md\n${servers}\`\`\``)
         }
 
-        var server = this.client.servers[parseInt(args.server) - 1]
-
-        var roles = msg.member.roles.cache
-        var admins = this.client.provider.get(msg.guild, "admins", [])
-        var admin_roles = this.client.provider.get(msg.guild, "admin_roles", [])
-        
-        if (admins.includes(msg.member.id) || roles.some(r => admin_roles.includes(r.id))) {
-            var player = (await server.getPlayers()).find(p => new RegExp(args.player, 'i').test(p.Name))
-            if (player) {
-                var response = await server.kickPlayer(player.Slot)
-                msg.react(response.Ok ? "✅" : "❌")
-            } else {
-                msg.react("❌")
-            }
+        var server = this.client.servers[parseInt(args.server) - 1] 
+        var player = (await server.getPlayers()).find(p => new RegExp(args.player, 'i').test(p.Name))
+        if (player) {
+            var response = await server.kickPlayer(player.Slot)
+            msg.react(response.Ok ? "✅" : "❌")
         } else {
             msg.react("❌")
         }
+    }
+
+    hasPermission(msg) {
+        var roles = msg.member.roles.cache
+        var admins = this.client.provider.get(msg.guild, "admins", [])
+        var admin_roles = this.client.provider.get(msg.guild, "admin_roles", [])
+        if (!admins.includes(msg.member.id) && !roles.some(r => admin_roles.includes(r.id))) {
+            msg.react("❌")
+            return false
+        }
+        return true
     }
 }
