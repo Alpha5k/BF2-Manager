@@ -139,7 +139,7 @@ class Status {
             if (team_players.length) {
                 embed.fields.push({
                     "name": teams[team],
-                    "value": team_players.map(p => `\`${p.Name}\` - ${p.Kills} Kills`),
+                    "value": team_players.map(p => `\`${p.Name}\` - ${p.Score} Points`),
                     "inline": true
                 })
             }
