@@ -1,5 +1,6 @@
 const commando = require('discord.js-commando')
 const table = require('table')
+const {decode} = require('html-entities')
 
 const teams = {
     "CIS": "CIS",
@@ -47,7 +48,7 @@ module.exports = class PlayersCommand extends commando.Command {
         var server = this.client.servers[parseInt(args.server) - 1]
 
         var players = await server.getPlayers()
-        players = players.map(p => [p.Slot, p.Name, teams[p.Team], p.Score, p.Kills, p.Deaths, p.Ping])
+        players = players.map(p => [p.Slot, decode(p.Name), teams[p.Team], p.Score, p.Kills, p.Deaths, p.Ping])
         players.unshift(["Slot", "Name", "Team", "Score", "Kills", "Deaths", "Ping"])
 
         var list = table.table(players, {
