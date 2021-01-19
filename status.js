@@ -66,8 +66,7 @@ const teams = {
     "Tus": "Tusken",
     "Wam": "Wampas",
     "Woo": "Wookies",
-    "Vil": "Villains",
-    "Non": "None"
+    "Vil": "Villains"
 }
 
 function parseMap(map) {
