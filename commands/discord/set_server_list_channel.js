@@ -31,7 +31,6 @@ module.exports = class SetServerListChannel extends commando.Command {
         var admins = this.client.provider.get(msg.guild, "admins", [])
         var admin_roles = this.client.provider.get(msg.guild, "admin_roles", [])
         if (!admins.includes(msg.member.id) && !roles.some(r => admin_roles.includes(r.id))) {
-            msg.react("❌")
             return false
         }
         return true

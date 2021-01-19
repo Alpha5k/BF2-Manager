@@ -1,4 +1,5 @@
 const table = require('table')
+const {decode} = require('html-entities')
 
 const status_ids = [
     "Running",
@@ -33,7 +34,8 @@ const maps = {
     "spa9": "Space Tatooine",
     "tan1": "Tantive IV",
     "uta1": "Utapau",
-    "yav1": "Yavin 4"
+    "yav1": "Yavin 4",
+    "PTC": "Patch 2"
 }
 const modes = {
     "1flag": "1-flag CTF",
@@ -65,7 +67,7 @@ function parseMap(map) {
     if (!match) {
         return [map, "", ""]
     }
-    var map = match[1].toLowerCase() in maps ? maps[match[1]] : match[0]
+    var map = match[1] in maps ? maps[match[1]] : match[0]
     var mode = match[3].toLowerCase() in modes ? modes[match[3]] : ""
     var era = match[2].toLowerCase() in eras ? eras[match[2]] : ""
     return [map, mode, era]
@@ -91,7 +93,7 @@ class Status {
         
         var embed = {
             "color": 10921638,
-            "title": status.ServerName,
+            "title": decode(status.ServerName),
             "description": "Updates every 30 seconds",
             "thumbnail": {
                 "url": "https://i.imgur.com/QdnYTeA.png"
@@ -198,7 +200,7 @@ class Status {
         servers = servers.items.map(s => s.matchmaking.fgd_str_host_name)
         for (var server of this.client.servers) {
             try {
-                var name = (await server.getStatus()).ServerName
+                var name = decode((await server.getStatus()).ServerName)
             } catch (e) {
                 console.error(`Error retrieving status for ${server.name}: ${e.message}`)
                 continue

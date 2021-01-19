@@ -31,7 +31,6 @@ module.exports = class RemoveAdminCommand extends commando.Command {
 
     hasPermission(msg) {
         if (!this.client.isOwner(msg.member)) {
-            msg.react("❌")
             return false
         }
         return true
