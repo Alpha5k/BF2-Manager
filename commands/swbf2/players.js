@@ -54,6 +54,8 @@ module.exports = class PlayersCommand extends commando.Command {
             drawHorizontalLine: (i,s) => i == 0 || i == 1 || i == s
         }).split("\n", players.length + 3)
 
-        msg.channel.send(`\`\`\`${list.join("\n")}\`\`\``)
+        for (var i = 0; i < list.length; i += 20) {
+            await msg.channel.send(`\`\`\`${list.slice(i, i + 20).join("\n")}\`\`\``)
+        }
     }
 }
