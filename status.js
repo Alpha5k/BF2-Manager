@@ -118,7 +118,7 @@ class Status {
                 },
                 {
                     "name": "Current Map",
-                    "value": status.CurrentMap || "None",
+                    "value": parseMap(status.CurrentMap)[0] || "None",
                     "inline": true
                 }
             ],
