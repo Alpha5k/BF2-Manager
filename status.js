@@ -35,7 +35,7 @@ const maps = {
     "tan1": "Tantive IV",
     "uta1": "Utapau",
     "yav1": "Yavin 4",
-    "PTC": "Patch 2"
+    "PTC": "Patch 2.0"
 }
 const modes = {
     "1flag": "1-flag CTF",
@@ -55,11 +55,18 @@ const eras = {
 }
 
 const teams = {
-    "Her": "Heroes",
-    "Vil": "Villains",
+    "CIS": "CIS",
     "Emp": "Empire",
+    "Ewo": "Ewoks",
+    "Gun": "Gungan",
+    "Her": "Heroes",
+    "Jaw": "Jawas",
     "Reb": "Rebels",
-    "Ewo": "Ewoks"
+    "Rep": "Republic",
+    "Tus": "Tusken",
+    "Wam": "Wampas",
+    "Woo": "Wookies",
+    "Vil": "Villains"
 }
 
 function parseMap(map) {

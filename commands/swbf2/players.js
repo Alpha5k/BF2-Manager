@@ -2,11 +2,18 @@ const commando = require('discord.js-commando')
 const table = require('table')
 
 const teams = {
-    "Her": "Heroes",
-    "Vil": "Villains",
-    "Reb": "Rebels",
+    "CIS": "CIS",
     "Emp": "Empire",
-    "Non": "None"
+    "Ewo": "Ewoks",
+    "Gun": "Gungan",
+    "Her": "Heroes",
+    "Jaw": "Jawas",
+    "Reb": "Rebels",
+    "Rep": "Republic",
+    "Tus": "Tusken",
+    "Wam": "Wampas",
+    "Woo": "Wookies",
+    "Vil": "Villains"
 }
 
 module.exports = class PlayersCommand extends commando.Command {
