@@ -13,7 +13,8 @@ const teams = {
     "Tus": "Tusken",
     "Wam": "Wampas",
     "Woo": "Wookies",
-    "Vil": "Villains"
+    "Vil": "Villains",
+    "Non": "None"
 }
 
 module.exports = class PlayersCommand extends commando.Command {
