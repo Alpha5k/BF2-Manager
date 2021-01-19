@@ -70,9 +70,12 @@ const teams = {
 }
 
 function parseMap(map) {
+    if (!map) {
+        return ["None", "", ""]
+    }
     var match = map.match(/^(\w+)([a-z])_(\w+)$/i)
     if (!match) {
-        return [map, "", ""]
+        return [map]
     }
     var map = match[1] in maps ? maps[match[1]] : match[0]
     var mode = match[3].toLowerCase() in modes ? modes[match[3]] : ""
@@ -97,7 +100,9 @@ class Status {
             var status = {ServerName: server.name, Status: 1, MaxPlayers: 0}
             var players = []
         }
-        
+
+        var [map, mode, era] = parseMap(status.CurrentMap)
+
         var embed = {
             "color": 10921638,
             "title": decode(status.ServerName),
@@ -118,7 +123,7 @@ class Status {
                 },
                 {
                     "name": "Current Map",
-                    "value": parseMap(status.CurrentMap)[0] || "None",
+                    "value": mode ? `${map} - ${mode}` : map,
                     "inline": true
                 }
             ],
