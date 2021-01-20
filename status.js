@@ -192,7 +192,7 @@ class Status {
                     
                 var servers = await this.client.galaxy.getServers()
                 servers = servers.items.map(s => s.matchmaking)
-                servers = servers.filter(s => s.fgd_str_map_name.startsWith("PTC")) //Patch 2.0
+                servers = servers.filter(s => s.fgd_str_host_name.includes("OSBF2")) //Patch 2.0
     
                 var list = this.createServerList(servers)
     
