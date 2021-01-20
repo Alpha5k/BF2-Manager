@@ -136,8 +136,8 @@ class Status {
             var team_players = players.filter(p => p.Team == team)
             if (team_players.length) {
                 embed.fields.push({
-                    "name": teams[team],
-                    "value": team_players.map(p => `\`${p.Name}\` - ${p.Score} Points`),
+                    "name": `${teams[team]} - ${team_players.reduce((k,p) => k += p.Kills, 0)} Kills`,
+                    "value": team_players.map(p => `\`${p.Name}\` - ${p.Kills} Kills`),
                     "inline": true
                 })
             }
@@ -192,7 +192,7 @@ class Status {
                     
                 var servers = await this.client.galaxy.getServers()
                 servers = servers.items.map(s => s.matchmaking)
-                servers = servers.filter(s => s.fgd_str_map_name.endsWith("eli")) //Hero Assault
+                servers = servers.filter(s => s.fgd_str_map_name.startsWith("PTC")) //Patch 2.0
     
                 var list = this.createServerList(servers)
     
