@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const {decode} = require('html-entities');
 
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -17,7 +18,9 @@ class WebAdmin {
             body: "{'action': 'status_get'}",
             headers: {'Authorization': this.auth}
         })
-        return await status.json()
+        status = await status.json()
+        status.ServerName = decode(status.ServerName)
+        return status
     }
 
     async getPlayers() {
@@ -26,7 +29,9 @@ class WebAdmin {
             body: "{'Action': 'players_update'}",
             headers: {'Authorization': this.auth}
         })
-        return await players.json()
+        players = await players.json()
+        players.forEach(p => p.Name = decode(p.Name))
+        return players
     }
 
     async getChat() {

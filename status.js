@@ -1,5 +1,4 @@
 const table = require('table')
-const {decode} = require('html-entities')
 
 const status_ids = [
     "Running",
@@ -105,7 +104,7 @@ class Status {
 
         var embed = {
             "color": 10921638,
-            "title": decode(status.ServerName),
+            "title": status.ServerName,
             "description": "Updates every 30 seconds",
             "thumbnail": {
                 "url": "https://i.imgur.com/QdnYTeA.png"
@@ -193,7 +192,7 @@ class Status {
                     
                 var servers = await this.client.galaxy.getServers()
                 servers = servers.items.map(s => s.matchmaking)
-                servers = servers.filter(s => s.fgd_str_map_name.endsWith("eli") || s.fgd_str_map_name.endsWith("gay"))
+                servers = servers.filter(s => s.fgd_str_map_name.endsWith("eli")) //Hero Assault
     
                 var list = this.createServerList(servers)
     
@@ -212,7 +211,7 @@ class Status {
         servers = servers.items.map(s => s.matchmaking.fgd_str_host_name)
         for (var server of this.client.servers) {
             try {
-                var name = decode((await server.getStatus()).ServerName)
+                var name = (await server.getStatus()).ServerName
             } catch (e) {
                 console.error(`Error retrieving status for ${server.name}: ${e.message}`)
                 continue
