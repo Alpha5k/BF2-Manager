@@ -14,12 +14,17 @@ module.exports = class InactiveCommand extends commando.Command {
     async run(msg, args) {
         var activeRole = msg.guild.roles.cache.find(r => r.name == "Scrimmer")
         var inactiveRole = msg.guild.roles.cache.find(r => r.name == "Non Scrimmer")
+        var freeplayRole = msg.guild.roles.cache.find(r => r.name == "Freeplay")
 
-        if (activeRole) {
-            msg.member.roles.remove(inactiveRole)
+        if (msg.member.roles.cache.has(activeRole.id)) {
+            msg.member.roles.remove(activeRole)
         }
-
-        msg.member.roles.add(inactiveRole)
-        msg.react("✅")
+        if (msg.member.roles.cache.has(freeplayRole.id)) {
+            msg.member.roles.remove(freeplayRole)
+        }
+        if (!msg.member.roles.cache.has(inactiveRole.id)) {
+            msg.member.roles.add(inactiveRole)
+            msg.react("✅")
+        }
     }
 }
