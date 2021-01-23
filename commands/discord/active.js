@@ -14,11 +14,7 @@ module.exports = class ActiveCommand extends commando.Command {
 
     async run(msg, args) {
         var activeRole = msg.guild.roles.cache.find(r => r.name == "Scrimmer")
-        var inactiveRole = msg.guild.roles.cache.find(r => r.name == "Non Scrimmer")
 
-        if (msg.member.roles.cache.has(inactiveRole.id)) {
-            msg.member.roles.remove(inactiveRole)
-        }
         if (!msg.member.roles.cache.has(activeRole.id)) {
             msg.member.roles.add(activeRole)
             msg.react("✅")
