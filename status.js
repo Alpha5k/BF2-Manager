@@ -104,7 +104,7 @@ class Status {
 
         var embed = {
             "color": 10921638,
-            "title": status.ServerName,
+            "title": status.ServerName.trim(),
             "description": "Updates every 30 seconds",
             "thumbnail": {
                 "url": "https://i.imgur.com/QdnYTeA.png"

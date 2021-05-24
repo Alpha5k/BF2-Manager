@@ -20,6 +20,11 @@ class WebAdmin {
         })
         status = await status.json()
         status.ServerName = decode(status.ServerName)
+        if (status.ServerName == "-") {
+            status.ServerName = this.name
+            status.CurrentMap = null
+            status.MaxPlayers = 0
+        }
         return status
     }
 
