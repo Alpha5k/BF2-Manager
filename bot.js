@@ -14,7 +14,7 @@ const config = require('./config.json')
 const client = new commando.Client({
 	owner: config.owner,
 	commandPrefix: config.prefix,
-    intents: 13824
+    intents: 13825
 })
 
 client.on('error', console.error)
