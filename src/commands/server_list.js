@@ -30,8 +30,14 @@ class ServerListCommand extends Command {
             servers = servers.filter(s => s.fgd_str_map_name.split("_")[0].endsWith(era))
         }
 
-        var table = createServerTable(servers)
-        return interaction.reply("```" + table + "```")
+        for (var i = 0; i < servers.length; i += 20) {
+            var table = createServerTable(servers.slice(i, i + 20))
+            if (i == 0) {
+                interaction.reply("```" + table + "```")
+            } else {
+                interaction.followUp("```" + table + "```")
+            }
+        }
     }
 
     async registerApplicationCommands(registry) {
