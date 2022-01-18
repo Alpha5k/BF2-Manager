@@ -160,6 +160,18 @@ function createServerTable(servers) {
     return server_table
 }
 
+function createPlayerTable(players) {
+    players = players.map(p => [p.Slot, p.Name, teams[p.Team], p.Score, p.Kills, p.Deaths, p.Ping])
+    players.unshift(["Slot", "Name", "Team", "Score", "Kills", "Deaths", "Ping"])
+
+    var player_table = table.table(players, {
+        border: table.getBorderCharacters("norc"),
+        drawHorizontalLine: (i,s) => i == 0 || i == 1 || i == s
+    })
+
+    return player_table
+}
+
 function isOwner(interaction) {
     return interaction.user.id == config.owner
 }
@@ -187,6 +199,7 @@ function isAdmin(interaction, server) {
 module.exports = {
     createStatusEmbed,
     createServerTable,
+    createPlayerTable,
     isOwner,
     isAdmin
 }

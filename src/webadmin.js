@@ -8,10 +8,11 @@ function timeout(ms) {
 }
 
 class WebAdmin {
-    constructor(name, url, username, password) {
+    constructor(name, url, username, password, restart = true) {
         this.name = name
         this.url = url
         this.auth = `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`
+        this.restart = restart
     }
 
     async getStatus() {
@@ -115,6 +116,6 @@ class WebAdmin {
     }
 }
 
-var clients = servers.map(s => new WebAdmin(s.name, s.url, s.username, s.password))
+var clients = servers.map(s => new WebAdmin(s.name, s.url, s.username, s.password, s.restart))
 
 module.exports = clients

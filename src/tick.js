@@ -79,6 +79,8 @@ async function restartServers() {
     server_list = server_list.items.map(s => s.matchmaking.fgd_str_host_name)
 
     for (var server of servers) {
+        if (!server.restart) continue
+
         try {
             var server_name = (await server.getStatus()).ServerName
         } catch (e) {
@@ -108,7 +110,7 @@ async function restartServers() {
 function formatMessage(chat) {
     var date = new Date()
     var time = date.toLocaleTimeString('en-US', {hour12: false, timeZoneName: 'short'})
-    return "```" + `[${time}] ${chat.PlayerName}: ${decode(chat.Message)}` + "```"
+    return "```" + `[${time}] ${decode(chat.PlayerName)}: ${decode(chat.Message)}` + "```"
 }
 
 async function bridgeChats() {
