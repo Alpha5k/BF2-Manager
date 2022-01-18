@@ -30,6 +30,7 @@ class ServerListCommand extends Command {
             servers = servers.filter(s => s.fgd_str_map_name.split("_")[0].endsWith(era))
         }
 
+        var table = createServerTable(servers)
         await interaction.reply({embeds: [{description: "```" + table + "```"}]})
     }
 
