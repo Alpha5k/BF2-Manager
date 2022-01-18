@@ -1,5 +1,6 @@
 const {container} = require('@sapphire/framework');
 const {createStatusEmbed, createServerTable} = require('./utils.js')
+const {decode} = require('html-entities')
 
 const GOG = require('./galaxy.js')
 const servers = require('./webadmin.js')
@@ -107,7 +108,7 @@ async function restartServers() {
 function formatMessage(chat) {
     var date = new Date()
     var time = date.toLocaleTimeString('en-US', {hour12: false, timeZoneName: 'short'})
-    return "```" + `[${time}] ${chat.PlayerName}: ${chat.Message}` + "```"
+    return "```" + `[${time}] ${chat.PlayerName}: ${decode(chat.Message)}` + "```"
 }
 
 async function bridgeChats() {
