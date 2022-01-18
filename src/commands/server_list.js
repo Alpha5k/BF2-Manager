@@ -33,9 +33,9 @@ class ServerListCommand extends Command {
         for (var i = 0; i < servers.length; i += 20) {
             var table = createServerTable(servers.slice(i, i + 20))
             if (i == 0) {
-                interaction.reply("```" + table + "```")
+                await interaction.reply("```" + table + "```")
             } else {
-                interaction.followUp("```" + table + "```")
+                await interaction.followUp("```" + table + "```")
             }
         }
     }
