@@ -30,8 +30,8 @@ class ServerListCommand extends Command {
             servers = servers.filter(s => s.fgd_str_map_name.split("_")[0].endsWith(era))
         }
 
-        for (var i = 0; i < servers.length; i += 20) {
-            var table = createServerTable(servers.slice(i, i + 20))
+        for (var i = 0; i < servers.length; i += 15) {
+            var table = createServerTable(servers.slice(i, i + 15))
             if (i == 0) {
                 await interaction.reply("```" + table + "```")
             } else {
