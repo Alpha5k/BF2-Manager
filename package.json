@@ -8,7 +8,7 @@
   },
   "name": "bf2-manager",
   "version": "2.0.0",
-  "description": "SWBF2 Server Manager Discord Bot",
+  "description": "Discord Bot for SWBF2Admin",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
