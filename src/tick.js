@@ -22,13 +22,13 @@ async function updateStatusEmbeds() {
 
     for (var i = 0; i < servers.length; i++) {
         var server = servers[i]
-        var message_id = message_ids.find(m => m.server == i).id
+        var message_id = message_ids.find(m => m.server == i)
 
         try {
             var embed = await createStatusEmbed(server)
     
             if (message_id) {
-                var message = await channel.messages.fetch(message_id)
+                var message = await channel.messages.fetch(message_id.id)
                 await message.edit({embeds: [embed]})
             } else {
                 var {id} = await channel.send({embeds: [embed]})
