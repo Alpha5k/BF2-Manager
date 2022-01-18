@@ -1,6 +1,8 @@
 const fetch = require('node-fetch');
 const {decode} = require('html-entities');
 
+const servers = require('../servers.json')
+
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -54,7 +56,7 @@ class WebAdmin {
     async sendChat(msg) {
         var chat = await fetch (`${this.url}/live/chat`, {
             method: 'POST',
-            body: `{'Action':'chat_send', 'Message':'${msg}'}`,
+            body: `{'Action': 'chat_send', 'Message': '${msg}'}`,
             headers: {'Authorization': this.auth, 'cookie': this.cookie}
         })
         if (!this.cookie) {
@@ -66,7 +68,7 @@ class WebAdmin {
     async kickPlayer(id) {
         var response = await fetch (`${this.url}/live/players`, {
             method: 'POST',
-            body: `{'Action':'players_kick', 'PlayerId':${id}}`,
+            body: `{'Action': 'players_kick', 'PlayerId': ${id}}`,
             headers: {'Authorization': this.auth}
         })
         return await response.json()
@@ -75,7 +77,7 @@ class WebAdmin {
     async banPlayer(id) {
         var response = await fetch (`${this.url}/live/players`, {
             method: 'POST',
-            body: `{'Action':'players_ban', 'BanDuration':-1, 'BanTypeId':'0', 'PlayerId':${id}}`,
+            body: `{'Action': 'players_ban', 'BanDuration': -1, 'BanTypeId': '0', 'PlayerId': ${id}}`,
             headers: {'Authorization': this.auth}
         })
         return await response.json()
@@ -84,7 +86,7 @@ class WebAdmin {
     async swapPlayer(id) {
         var response = await fetch (`${this.url}/live/players`, {
             method: 'POST',
-            body: `{'Action':'players_swap', 'PlayerId':${id}}`,
+            body: `{'Action': 'players_swap', 'PlayerId': ${id}}`,
             headers: {'Authorization': this.auth}
         })
         return await response.json()
@@ -113,4 +115,6 @@ class WebAdmin {
     }
 }
 
-module.exports = WebAdmin
+var clients = servers.map(s => new WebAdmin(s.name, s.url, s.username, s.password))
+
+module.exports = clients

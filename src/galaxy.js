@@ -1,5 +1,7 @@
 const fetch = require('node-fetch');
 
+const config = require('../config.json')
+
 const CLIENT_ID = "48393168095086872"
 const CLIENT_SECRET = "2eb6e8e813464e74a4854c94648b12f07c4a2e2446dfcac4bd83d782c580b31a"
 
@@ -10,7 +12,7 @@ class Galaxy {
 
     async refreshToken() {
         var response = await fetch(`https://auth.gog.com/token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=steam_ticket&steam_ticket=${this.steam_ticket}`, {method: 'GET'})
-        var response = await response.json()
+        response = await response.json()
 
         this.access_token = response.access_token
         this.token_expiration = new Date(Date.now() + (response.expires_in * 1000 / 2))
@@ -41,4 +43,4 @@ class Galaxy {
     }
 }
 
-module.exports = Galaxy
+module.exports = new Galaxy(config.steam_ticket)

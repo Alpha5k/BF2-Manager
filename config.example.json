@@ -1,6 +1,7 @@
 {
     "owner": "",
-    "prefix": "!",
+    "guild": "",
     "steam_ticket": "",
-    "discord_token": ""
+    "discord_token": "",
+    "chat_update": 1000
 }
