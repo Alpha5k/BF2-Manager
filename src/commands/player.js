@@ -1,4 +1,4 @@
-const {Command} = require('@sapphire/framework');
+const {container, Command} = require('@sapphire/framework');
 
 const servers = require('../webadmin.js')
 const {isAdmin} = require('../utils.js')

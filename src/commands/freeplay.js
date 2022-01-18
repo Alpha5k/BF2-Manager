@@ -1,4 +1,4 @@
-const {Command} = require('@sapphire/framework');
+const {container, Command} = require('@sapphire/framework');
 
 class FreeplayCommand extends Command {
     constructor(context, options) {

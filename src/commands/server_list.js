@@ -1,4 +1,4 @@
-const {Command} = require('@sapphire/framework');
+const {container, Command} = require('@sapphire/framework');
 
 const GOG = require('../galaxy.js')
 const {createServerTable} = require('../utils.js')
