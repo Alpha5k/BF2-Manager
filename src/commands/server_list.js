@@ -1,4 +1,5 @@
 const {container, Command} = require('@sapphire/framework');
+const {MessageAttachment} = require('discord.js')
 
 const GOG = require('../galaxy.js')
 const {createServerTable} = require('../utils.js')
@@ -31,7 +32,12 @@ class ServerListCommand extends Command {
         }
 
         var table = createServerTable(servers)
-        await interaction.reply({embeds: [{description: "```" + table + "```"}]})
+        if (servers.length > 15) {
+            var file = new MessageAttachment(Buffer.from(table, 'utf8'), 'servers.txt')
+            await interaction.reply({files: [file]})
+        } else {
+            await interaction.reply("```" + table + "```")
+        }
     }
 
     async registerApplicationCommands(registry) {
