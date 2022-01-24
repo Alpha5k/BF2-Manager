@@ -34,8 +34,8 @@ const client = new ManagerClient()
 
 client.login(config.discord_token)
 
-setInterval(() => updateStatusEmbeds(), 30000)
-setInterval(() => updateServerList(), 30000)
-setInterval(() => restartServers(), 300000)
+updateStatusEmbeds()
+updateServerList()
+restartServers()
 
 bridgeChats()

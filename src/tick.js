@@ -39,6 +39,8 @@ async function updateStatusEmbeds() {
             console.error(`Error updating status message for ${server.name}: ${e.message}`)
         }
     }
+
+    setTimeout(updateStatusEmbeds, config.server_update || 30000)
 }
 
 async function updateServerList() {
@@ -72,6 +74,8 @@ async function updateServerList() {
     } catch (e) {
         console.error(`Error updating server list message: ${e.message}`)
     }
+
+    setTimeout(updateServerList, config.server_update || 30000)
 }
 
 async function restartServers() {
@@ -105,6 +109,8 @@ async function restartServers() {
             }
         }
     }
+
+    setTimeout(restartServers, config.server_update || 30000)
 }
 
 function formatMessage(chat) {
