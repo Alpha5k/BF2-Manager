@@ -40,7 +40,7 @@ async function updateStatusEmbeds() {
         }
     }
 
-    setTimeout(updateStatusEmbeds, config.server_update || 30000)
+    setTimeout(updateStatusEmbeds, 30000)
 }
 
 async function updateServerList() {
@@ -75,7 +75,7 @@ async function updateServerList() {
         console.error(`Error updating server list message: ${e.message}`)
     }
 
-    setTimeout(updateServerList, config.server_update || 30000)
+    setTimeout(updateServerList, 30000)
 }
 
 async function restartServers() {
@@ -110,7 +110,7 @@ async function restartServers() {
         }
     }
 
-    setTimeout(restartServers, config.server_update || 30000)
+    setTimeout(restartServers, 300000)
 }
 
 function formatMessage(chat) {
@@ -141,7 +141,7 @@ async function bridgeChats() {
         }
     }
 
-    setTimeout(bridgeChats, config.chat_update || 1000)
+    setTimeout(bridgeChats, 1000)
 }
 
 module.exports = {
