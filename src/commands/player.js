@@ -31,14 +31,21 @@ class PlayerCommand extends Command {
     async chatInputRun(interaction) {
         var server_num = interaction.options.getInteger('server')
         var player_name = interaction.options.getString('player')
+        var player_slot = interaction.options.getInteger('slot')
 
         var server = servers[server_num]
         var players = await server.getPlayers()
-        var player = players.find(p => new RegExp(player_name, 'i').test(p.Name))
 
-        if (!player) {
-            return interaction.reply(`No player matching ${player_name} could be found.`)
+        if (player_name) {
+            var player = players.find(p => new RegExp(player_name, 'i').test(p.Name))
+            if (!player) return interaction.reply(`No player matching ${player_name} could be found.`)
+        } else if (player_slot) {
+            var player = players.find(p => p.Slot == player_slot)
+            if (!player) return interaction.reply(`No player with slot ${player_slot} could be found.`)
+        } else {
+            return interaction.reply("You must specify either a player name or slot.")
         }
+
 
         var status = await server.getStatus()
         var embed = {
@@ -90,7 +97,8 @@ class PlayerCommand extends Command {
         var components = [
             {type: 2, custom_id: "swap", style: 2, label: "Swap", disabled},
             {type: 2, custom_id: "kick", style: 1, label: "Kick", disabled},
-            {type: 2, custom_id: "ban", style: 4, label: "Ban", disabled}
+            {type: 2, custom_id: "ban", style: 4, label: "Ban", disabled},
+            {type: 2, custom_id: "promote", style: 3, label: "Promote", disabled}
         ]
 
         interaction.reply({embeds: [embed], components: [{type: 1, components}]})
@@ -111,8 +119,12 @@ class PlayerCommand extends Command {
                 {
                     name: "player",
                     description: "Player name",
-                    type: 3,
-                    required: true
+                    type: 3
+                },
+                {
+                    name: "slot",
+                    description: "Player slot",
+                    type: 4
                 }
             ]
         }, {

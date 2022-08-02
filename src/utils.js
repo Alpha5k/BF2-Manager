@@ -189,7 +189,7 @@ function isServerAdmin(interaction, server) {
 }
 
 function isAdmin(interaction, server) {
-    if (server) {
+    if (server != null) {
         return isOwner(interaction) || isGlobalAdmin(interaction) || isServerAdmin(interaction, server)
     }
 
@@ -201,5 +201,6 @@ module.exports = {
     createServerTable,
     createPlayerTable,
     isOwner,
-    isAdmin
+    isAdmin,
+    isGlobalAdmin
 }
