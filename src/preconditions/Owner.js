@@ -2,8 +2,8 @@ const {Precondition} = require('@sapphire/framework')
 const {isOwner} = require('../utils.js')
 
 class OwnerPrecondition extends Precondition {
-    chatInputRun(interaction) {
-        if (isOwner(interaction)) {
+    async chatInputRun(interaction) {
+        if (await isOwner(interaction)) {
             return this.ok()
         } else {
             return this.error({

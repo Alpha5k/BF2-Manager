@@ -12,7 +12,7 @@ class ServerListChannelCommand extends Command {
 
     async chatInputRun(interaction) {
         var channel = interaction.options.getChannel('channel')
-        container.db.push("/channels/server_list", channel.id)
+        await container.db.push("/channels/server_list", channel.id)
         interaction.reply(`GOG server list will be posted to <#${channel.id}>`)
     }
 

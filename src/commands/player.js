@@ -93,7 +93,7 @@ class PlayerCommand extends Command {
             }
         }
 
-        var disabled = !isAdmin(interaction, server_num)
+        var disabled = !(await isAdmin(interaction, server_num))
         var components = [
             {type: 2, custom_id: "swap", style: 2, label: "Swap", disabled},
             {type: 2, custom_id: "kick", style: 1, label: "Kick", disabled},

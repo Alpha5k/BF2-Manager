@@ -1,4 +1,5 @@
 const {container, LogLevel, SapphireClient} = require('@sapphire/framework')
+const {GatewayIntentBits} = require('discord.js')
 const {updateStatusEmbeds, updateServerList, restartServers, bridgeChats} = require('./tick.js')
 
 const {JsonDB} = require('node-json-db')
@@ -9,7 +10,7 @@ const config = require('../config.json')
 class ManagerClient extends SapphireClient {
     constructor() {
         super({
-            intents: ['GUILDS', 'GUILD_MESSAGES'],
+            intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
             logger: {level: LogLevel.Debug}
         })
     }

@@ -12,7 +12,7 @@ class LogsChannel extends Command {
 
     async chatInputRun(interaction) {
         var channel = interaction.options.getChannel('channel')
-        container.db.push("/channels/logs", channel.id)
+        await container.db.push("/channels/logs", channel.id)
         interaction.reply(`Bot logs will be posted to <#${channel.id}>`)
     }
 

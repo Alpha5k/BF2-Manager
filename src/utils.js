@@ -119,7 +119,7 @@ async function createStatusEmbed(server) {
                 "inline": true
             }
         ],
-        "timestamp": Date.now(),
+        "timestamp": new Date(),
         "footer": {
             "text": "SWBF2Admin"
         }
@@ -172,25 +172,27 @@ function createPlayerTable(players) {
     return player_table
 }
 
-function isOwner(interaction) {
+async function isOwner(interaction) {
     return interaction.user.id == config.owner
 }
 
-function isGlobalAdmin(interaction) {
+async function isGlobalAdmin(interaction) {
     var roles = interaction.member.roles.cache
-    var global_admins = container.db.getData("/global_admins")
+    var global_admins = await container.db.getData("/global_admins")
     return roles.some(r => global_admins.includes(r.id))
 }
 
-function isServerAdmin(interaction, server) {
+async function isServerAdmin(interaction, server) {
     var roles = interaction.member.roles.cache
-    var server_admins = container.db.filter("/server_admins", (a) => a.server == server).map(a => a.role)
+    var server_admins = await container.db.filter("/server_admins", (a) => a.server == server).map(a => a.role)
     return roles.some(r => server_admins.includes(r.id))
 }
 
-function isAdmin(interaction, server) {
+async function isAdmin(interaction, server) {
     if (server != null) {
-        return isOwner(interaction) || isGlobalAdmin(interaction) || isServerAdmin(interaction, server)
+        return (await isOwner(interaction)) ||
+               (await isGlobalAdmin(interaction)) ||
+               (await isServerAdmin(interaction, server))
     }
 
     return isOwner(interaction) || isGlobalAdmin(interaction)

@@ -17,14 +17,14 @@ class ChatBridgeChannelCommand extends Command {
         var channel = interaction.options.getChannel('channel')
 
         try {
-            var channels = container.db.getData("/channels/chat")
+            var channels = await container.db.getData("/channels/chat")
             channels = channels.filter(c => c.server != server_num)
         } catch (e) {
             var channels = []
         }
         
         channels.push({server: server_num, channel: channel.id})
-        container.db.push("/channels/chat", channels)
+        await container.db.push("/channels/chat", channels)
 
         var server = servers[server_num]
         interaction.reply(`Chat messages for ${server.name} will be bridged to <#${channel.id}>`)

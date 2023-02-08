@@ -24,7 +24,7 @@ class PromoteButton extends InteractionHandler {
 
 		await interaction.deferReply()
 
-		if (isGlobalAdmin(interaction)) {
+		if (await isGlobalAdmin(interaction)) {
 			await server.sendChat(`!putgroup ${player_name} Admin`)
 		} else {
 			await server.sendChat(`!putgroup ${player_name} Moderator`)

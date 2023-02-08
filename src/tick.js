@@ -9,14 +9,14 @@ const config = require('../config.json')
 
 async function updateStatusEmbeds() {
     try {
-        var channel_id = container.db.getData("/channels/status")
+        var channel_id = await container.db.getData("/channels/status")
         var channel = container.client.channels.cache.get(channel_id)
     } catch (e) {
         return
     }
 
     try {
-        var message_ids = container.db.getData("/messages/status")
+        var message_ids = await container.db.getData("/messages/status")
     } catch (e) {
         var message_ids = []
     }
@@ -33,7 +33,7 @@ async function updateStatusEmbeds() {
                 await message.edit({embeds: [embed]})
             } else {
                 var {id} = await channel.send({embeds: [embed]})
-                container.db.push("/messages/status[]", {id, server: i})
+                await container.db.push("/messages/status[]", {id, server: i})
             }
         } catch (e) {
             console.error(`Error updating status message for ${server.name}: ${e.message}`)
@@ -45,7 +45,7 @@ async function updateStatusEmbeds() {
 
 async function updateServerList() {
     try {
-        var channel_id = container.db.getData("/channels/server_list")
+        var channel_id = await container.db.getData("/channels/server_list")
         var channel = container.client.channels.cache.get(channel_id)
     } catch (e) {
         return
@@ -59,7 +59,7 @@ async function updateServerList() {
         var table = createServerTable(server_list)
 
         try {
-            var message_id = container.db.getData("/messages/server_list")
+            var message_id = await container.db.getData("/messages/server_list")
             var message = await channel.messages.fetch(message_id)
         } catch (e) {
             var message = null
@@ -69,7 +69,7 @@ async function updateServerList() {
             await message.edit("```" + table + "```")
         } else {
             var {id} = await channel.send("```" + table + "```")
-            container.db.push("/messages/server_list", id)
+            await container.db.push("/messages/server_list", id)
         }
     } catch (e) {
         console.error(`Error updating server list message: ${e.message}`)
@@ -98,7 +98,7 @@ async function restartServers() {
                 await server.restartServer()
 
                 try {
-                    var channel_id = container.db.getData("/channels/logs")
+                    var channel_id = await container.db.getData("/channels/logs")
                     var channel = container.client.channels.cache.get(channel_id)
                     await channel.send(`Server offline for 5 minutes. Restarting ${server_name.trim()}`)
                 } catch (e) {
@@ -121,7 +121,7 @@ function formatMessage(chat) {
 
 async function bridgeChats() {
     try {
-        var channels = container.db.getData("/channels/chat")
+        var channels = await container.db.getData("/channels/chat")
     } catch (e) {
         var channels = []
     }

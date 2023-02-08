@@ -19,7 +19,7 @@ class ServerCommand extends Command {
         var embed = await createStatusEmbed(server)
         delete embed.description
 
-        var disabled = !isAdmin(interaction, server_num)
+        var disabled = !(await isAdmin(interaction, server_num))
         var components = [
             {type: 2, custom_id: "start", style: 3, label: "Start", disabled},
             {type: 2, custom_id: "stop", style: 4, label: "Stop", disabled},

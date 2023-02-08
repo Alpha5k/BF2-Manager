@@ -12,8 +12,8 @@ class StatusChannelCommand extends Command {
 
     async chatInputRun(interaction) {
         var channel = interaction.options.getChannel('channel')
-        container.db.push("/channels/status", channel.id)
-        container.db.push("/messages/status", [])
+        await container.db.push("/channels/status", channel.id)
+        await container.db.push("/messages/status", [])
         interaction.reply(`Server status updates will be posted to <#${channel.id}>`)
     }
 

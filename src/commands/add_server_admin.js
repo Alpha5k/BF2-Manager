@@ -16,7 +16,7 @@ class AddServerAdminCommand extends Command {
         var role = interaction.options.getRole('role')
         var server_num = interaction.options.getInteger('server')
 
-        container.db.push("/server_admins[]", {role: role.id, server: server_num})
+        await container.db.push("/server_admins[]", {role: role.id, server: server_num})
 
         var server = servers[server_num]
         interaction.reply(`<@&${role.id}> added as an admin for ${server.name}.`)

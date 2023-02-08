@@ -13,7 +13,7 @@ class AddGlobalAdminCommand extends Command {
     async chatInputRun(interaction) {
         var role = interaction.options.getRole('role')
 
-        container.db.push("/global_admins[]", role.id)
+        await container.db.push("/global_admins[]", role.id)
 
         interaction.reply(`<@&${role.id}> added as a global admin.`)
     }
