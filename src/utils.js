@@ -136,7 +136,7 @@ async function createStatusEmbed(server) {
             })
         }
     }
-
+	
     return embed
 }
 
@@ -184,8 +184,9 @@ async function isGlobalAdmin(interaction) {
 
 async function isServerAdmin(interaction, server) {
     var roles = interaction.member.roles.cache
-    var server_admins = await container.db.filter("/server_admins", (a) => a.server == server).map(a => a.role)
-    return roles.some(r => server_admins.includes(r.id))
+    var server_admins = await container.db.filter("/server_admins", (a) => a.server == server)
+	var admin_roles = server_admins.map(a => a.role)
+    return roles.some(r => admin_roles.includes(r.id))
 }
 
 async function isAdmin(interaction, server) {

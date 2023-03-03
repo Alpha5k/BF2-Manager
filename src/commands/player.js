@@ -87,7 +87,7 @@ class PlayerCommand extends Command {
                     "inline": true
                 }
             ],
-            "timestamp": Date.now(),
+            "timestamp": new Date(),
             "footer": {
                 "text": "SWBF2Admin"
             }
