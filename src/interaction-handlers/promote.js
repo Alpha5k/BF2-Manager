@@ -29,10 +29,16 @@ class PromoteButton extends InteractionHandler {
 		} else {
 			await server.sendChat(`!putgroup ${player_name} Moderator`)
 		}
+		
+		await new Promise(r => setTimeout(r, 1000))
 
 		var chat = await server.getChat()
-		var {Message} = chat.find(m => m.IsSystem)
-		return interaction.editReply(decode(Message))
+		if (chat.length) {
+			var {Message} = chat.find(m => m.IsSystem)
+			return interaction.editReply(decode(Message))
+		}
+		
+		return interaction.editReply("Command sent")
 	}
 
 	async parse(interaction) {

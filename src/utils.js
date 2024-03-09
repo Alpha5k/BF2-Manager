@@ -78,8 +78,8 @@ function parseMap(map) {
         return [map]
     }
     var map = match[1] in maps ? maps[match[1]] : match[0]
-    var mode = match[3].toLowerCase() in modes ? modes[match[3]] : ""
-    var era = match[2].toLowerCase() in eras ? eras[match[2]] : ""
+    var mode = match[3].toLowerCase() in modes ? modes[match[3]] : match[3]
+    var era = match[2].toLowerCase() in eras ? eras[match[2]] : match[2]
     return [map, mode, era]
 }
 

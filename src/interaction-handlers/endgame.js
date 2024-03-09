@@ -23,10 +23,16 @@ class EndGameButton extends InteractionHandler {
 
 		await interaction.deferReply()
 		await server.sendChat(`!endgame`)
+		
+		await new Promise(r => setTimeout(r, 1000))
 
 		var chat = await server.getChat()
-		var {Message} = chat.find(m => m.IsSystem)
-		return interaction.editReply(decode(Message))
+		if (chat.length) {
+			var {Message} = chat.find(m => m.IsSystem)
+			return interaction.editReply(decode(Message))
+		}
+		
+		return interaction.editReply("Command sent")
 	}
 
 	async parse(interaction) {

@@ -141,7 +141,7 @@ async function bridgeChats() {
         }
     }
 
-    setTimeout(bridgeChats, 1000)
+    setTimeout(bridgeChats, 30000)
 }
 
 module.exports = {
