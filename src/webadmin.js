@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+//const fetch = require('node-fetch');
 const {decode} = require('html-entities');
 
 const servers = require('../servers.json')
@@ -8,7 +8,9 @@ function timeout(ms) {
 }
 
 class WebAdmin {
-    constructor(name, url, username, password, restart = true) {
+    constructor(id, type, name, url, username, password, restart = true) {
+        this.id = id
+        this.type = type
         this.name = name
         this.url = url
         this.auth = `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`
@@ -23,6 +25,7 @@ class WebAdmin {
         })
         status = await status.json()
         status.ServerName = decode(status.ServerName)
+        status.ServerName = status.ServerName.replace(/[^\x20-\x7F]/g, "")
         if (status.ServerName == " - ") {
             status.ServerName = this.name
             status.CurrentMap = null
@@ -49,7 +52,7 @@ class WebAdmin {
             headers: {'Authorization': this.auth, 'cookie': this.cookie}
         })
         if (!this.cookie) {
-            this.cookie = chat.headers.raw()['set-cookie']
+            this.cookie = chat.headers.getSetCookie()
         }
         return await chat.json()
     }
@@ -61,7 +64,7 @@ class WebAdmin {
             headers: {'Authorization': this.auth, 'cookie': this.cookie}
         })
         if (!this.cookie) {
-            this.cookie = chat.headers.raw()['set-cookie']
+            this.cookie = chat.headers.getSetCookie()
         }
         return await chat.json()
     }
@@ -75,10 +78,19 @@ class WebAdmin {
         return await response.json()
     }
 
-    async banPlayer(id) {
+    async banPlayer(id, type = 0) {
         var response = await fetch (`${this.url}/live/players`, {
             method: 'POST',
-            body: `{'Action': 'players_ban', 'BanDuration': -1, 'BanTypeId': '0', 'PlayerId': ${id}}`,
+            body: `{'Action': 'players_ban', 'BanDuration': -1, 'BanTypeId': '${type}', 'PlayerId': ${id}}`,
+            headers: {'Authorization': this.auth}
+        })
+        return await response.json()
+    }
+
+    async tempBanPlayer(id, type = 0) {
+        var response = await fetch (`${this.url}/live/players`, {
+            method: 'POST',
+            body: `{'Action': 'players_ban', 'BanDuration': 259200, 'BanTypeId': '${type}', 'PlayerId': ${id}}`,
             headers: {'Authorization': this.auth}
         })
         return await response.json()
@@ -116,6 +128,6 @@ class WebAdmin {
     }
 }
 
-var clients = servers.map(s => new WebAdmin(s.name, s.url, s.username, s.password, s.restart))
+var clients = servers.map(s => new WebAdmin(s.id, s.type, s.name, s.url, s.username, s.password, s.restart))
 
 module.exports = clients

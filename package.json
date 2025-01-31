@@ -1,11 +1,11 @@
 {
   "dependencies": {
     "@sapphire/framework": "next",
-    "discord.js": "^14.7.1",
-    "html-entities": "^2.3.3",
-    "node-fetch": "^2.6.9",
-    "node-json-db": "^2.1.4",
-    "table": "^6.8.1"
+    "discord.js": "^14.17.3",
+    "html-entities": "^2.5.2",
+    "node-fetch": "^3.3.2",
+    "node-json-db": "^2.3.1",
+    "table": "^6.9.0"
   },
   "name": "bf2-manager",
   "version": "2.0.0",

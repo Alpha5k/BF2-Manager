@@ -5,11 +5,9 @@ const {decode} = require('html-entities')
 const GOG = require('./galaxy.js')
 const servers = require('./webadmin.js')
 
-const config = require('../config.json')
-
-async function updateStatusEmbeds() {
+async function updateStatusEmbeds(type) {
     try {
-        var channel_id = await container.db.getData("/channels/status")
+        var channel_id = await container.db.getData("/channels/status/" + type)
         var channel = container.client.channels.cache.get(channel_id)
     } catch (e) {
         return
@@ -21,26 +19,54 @@ async function updateStatusEmbeds() {
         var message_ids = []
     }
 
-    for (var i = 0; i < servers.length; i++) {
-        var server = servers[i]
-        var message_id = message_ids.find(m => m.server == i)
+    var server_list = servers.filter(s => s.type == type)
+    for (let server of server_list) {
+        var message_id = message_ids.find(m => m.server == server.id)
 
         try {
             var embed = await createStatusEmbed(server)
-    
+
             if (message_id) {
                 var message = await channel.messages.fetch(message_id.id)
                 await message.edit({embeds: [embed]})
             } else {
                 var {id} = await channel.send({embeds: [embed]})
-                await container.db.push("/messages/status[]", {id, server: i})
+                await container.db.push("/messages/status[]", {id, server: server.id})
             }
         } catch (e) {
-            console.error(`Error updating status message for ${server.name}: ${e.message}`)
+            console.error(`[ERR] updateStatusEmbed(${server.id}): ${e.message}`)
         }
     }
+}
 
-    setTimeout(updateStatusEmbeds, 30000)
+async function sendServerPings() {
+    try {
+        var channel_id = await container.db.getData("/channels/server_pings")
+        var channel = container.client.channels.cache.get(channel_id)
+    } catch (e) {
+        return
+    }
+
+    for (let server of servers) {
+        if (!(await container.db.exists(`/subscriptions/${server.id}`))) continue
+        
+        var subscriptions = await container.db.getData(`/subscriptions/${server.id}`)
+        var users = Object.keys(subscriptions)
+
+        var players = await server.getPlayers()
+
+        for (var user of users) {
+            var sub = subscriptions[user]
+            if (players.length >= sub.player_count) {
+                if (!sub.last_ping || ((Date.now() - sub.last_ping) > 3600000)) {
+                    console.log(`[DBG] Sending server ping for ${user}`)
+                    await channel.send(`<@${user}> There are ${players.length} player(s) on ${server.name}`)
+                }
+                sub.last_ping = Date.now()
+                container.db.push(`/subscriptions/${server.id}/${user}`, sub)
+            }
+        }
+    }
 }
 
 async function updateServerList() {
@@ -72,15 +98,14 @@ async function updateServerList() {
             await container.db.push("/messages/server_list", id)
         }
     } catch (e) {
-        console.error(`Error updating server list message: ${e.message}`)
+        console.error(`[ERR] updateServerList(): ${e.message}`)
     }
-
-    setTimeout(updateServerList, 30000)
 }
 
 async function restartServers() {
     var server_list = await GOG.getServers()
     server_list = server_list.items.map(s => s.matchmaking.fgd_str_host_name)
+    server_list = server_list.map(s => s.replace(/[^\x20-\x7F]/g, ""))
 
     for (var server of servers) {
         if (!server.restart) continue
@@ -88,7 +113,7 @@ async function restartServers() {
         try {
             var server_name = (await server.getStatus()).ServerName
         } catch (e) {
-            console.error(`Error retrieving status for ${server.name}: ${e.message}`)
+            console.error(`[ERR] restartServers(${server.id}): ${e.message}`)
             continue
         }
 
@@ -109,8 +134,6 @@ async function restartServers() {
             }
         }
     }
-
-    setTimeout(restartServers, 300000)
 }
 
 function formatMessage(chat) {
@@ -130,7 +153,7 @@ async function bridgeChats() {
         try {
             server = servers[server]
             channel = container.client.channels.cache.get(channel)
-    
+
             var chats = await server.getChat()
             for (var chat of chats) {
                 if (chat.IsSystem) continue
@@ -140,12 +163,11 @@ async function bridgeChats() {
             continue
         }
     }
-
-    setTimeout(bridgeChats, 30000)
 }
 
 module.exports = {
     updateStatusEmbeds,
+    sendServerPings,
     updateServerList,
     restartServers,
     bridgeChats

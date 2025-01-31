@@ -12,8 +12,11 @@ class StatusChannelCommand extends Command {
 
     async chatInputRun(interaction) {
         var channel = interaction.options.getChannel('channel')
-        await container.db.push("/channels/status", channel.id)
+        var type = interaction.options.getString('type')
+
+        await container.db.push("/channels/status/" + type, channel.id)
         await container.db.push("/messages/status", [])
+
         interaction.reply(`Server status updates will be posted to <#${channel.id}>`)
     }
 
@@ -27,6 +30,13 @@ class StatusChannelCommand extends Command {
                     description: "Discord channel",
                     type: 7,
                     required: true,
+                },
+                {
+                    name: "type",
+                    description: "Server type",
+                    type: 3,
+                    required: true,
+                    choices: [{"name": "GOG", "value": "gog"}, {"name": "CC", "value": "cc"}]
                 }
             ]
         }, {

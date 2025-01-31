@@ -1,6 +1,6 @@
 const {container, LogLevel, SapphireClient} = require('@sapphire/framework')
 const {GatewayIntentBits} = require('discord.js')
-const {updateStatusEmbeds, updateServerList, restartServers, bridgeChats} = require('./tick.js')
+const {updateStatusEmbeds, sendServerPings, updateServerList, restartServers, bridgeChats} = require('./tick.js')
 
 const {JsonDB} = require('node-json-db')
 const {Config} = require('node-json-db/dist/lib/JsonDBConfig')
@@ -35,8 +35,19 @@ const client = new ManagerClient()
 
 client.login(config.discord_token)
 
-setTimeout(() => updateStatusEmbeds(), 30000)
-setTimeout(() => updateServerList(), 30000)
-setTimeout(() => restartServers(), 300000)
+setTimeout(() => {
+    //updateStatusEmbeds - 60 seconds
+    setInterval(() => updateStatusEmbeds("gog"), 60000)
+    setInterval(() => updateStatusEmbeds("cc"), 60000)
 
-setTimeout(() => bridgeChats(), 30000)
+    //sendServerPings - 60 seconds
+    setInterval(() => sendServerPings(), 60000)
+
+    //updateServerList - 30 seconds
+    setInterval(() => updateServerList(), 30000)
+    //restartServers - 5 minutes
+    setInterval(() => restartServers(), 300000)
+
+    //bridgeChats - 60 seconds (default)
+    setInterval(() => bridgeChats(), config.chat_update)
+}, 30000)

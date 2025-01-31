@@ -27,7 +27,12 @@ class BanButton extends InteractionHandler {
 			return interaction.reply(`Player ${player_name} could not be found.`)
 		}
 
-		var response = await server.banPlayer(player.Slot)
+		if (s.type == "cc") {
+			var response = await server.tempBanPlayer(player.Slot, 2)
+		} else {
+			var response = await server.banPlayer(player.Slot, 0)
+		}
+
 		if (response.Ok) {
 			return interaction.reply(`${player.Name} was banned by <@${interaction.user.id}>`)
 		}

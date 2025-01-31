@@ -129,6 +129,10 @@ async function createStatusEmbed(server) {
         var team_players = players.filter(p => p.Team == team)
         if (team_players.length) {
             var player_list = team_players.map(p => `\`${p.Name}\` - ${Math.floor(p.Score / 2)} Kills`)
+            if (player_list.length > 12) {
+                player_list = player_list.slice(0, 12)
+                player_list.push(`+ ${team_players.length - player_list.length} Players`)
+            }
             embed.fields.push({
                 "name": teams[team],
                 "value": player_list.join("\n"),
